@@ -1,3 +1,5 @@
+import java.util.Arrays;
+
 /**
  * El "canal" de transmisión: aquí se dañan los bits a propósito.
  *
@@ -23,7 +25,42 @@ public class Canal {
      * @return señal alterada (arreglo nuevo, misma longitud)
      */
     public static int[] alterar(int[] senal, int[] posiciones) {
-        throw new UnsupportedOperationException("Falta implementar Canal.alterar (Persona 3)");
+        if (senal == null) {
+            throw new IllegalArgumentException("La senal no puede ser nula");
+        }
+        if (posiciones == null) {
+            throw new IllegalArgumentException("El arreglo de posiciones no puede ser nulo");
+        }
+        for (int i = 0; i < senal.length; i++) {
+            if (senal[i] != 0 && senal[i] != 1) {
+                throw new IllegalArgumentException("Nivel invalido en la posicion " + i + ": " + senal[i]);
+            }
+        }
+        for (int i = 0; i < posiciones.length; i++) {
+            int pos = posiciones[i];
+            if (pos < 0 || pos >= senal.length) {
+                throw new IllegalArgumentException("Posicion fuera de rango: " + pos
+                        + " (rango valido: 0 a " + (senal.length - 1) + ")");
+            }
+        }
+
+        int[] alterada = Arrays.copyOf(senal, senal.length);
+
+        if (posiciones.length == 0) {
+            System.out.println("[Canal.alterar] No se indico ninguna posicion para alterar.");
+            return alterada;
+        }
+
+        System.out.println("[Canal.alterar] Alterando " + posiciones.length + " nivel(es) de la senal:");
+        for (int i = 0; i < posiciones.length; i++) {
+            int pos = posiciones[i];
+            int antes = alterada[pos];
+            int despues = 1 - antes;
+            alterada[pos] = despues;
+            System.out.println("  posicion " + pos + ": " + antes + " -> " + despues);
+        }
+
+        return alterada;
     }
 
     private Canal() { }
